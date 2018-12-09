@@ -1,7 +1,11 @@
+import pickle
+import base64
+from datetime import datetime
 from functools import wraps
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, Response, jsonify
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, Response, jsonify,
+    make_response
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -9,19 +13,22 @@ from Api.db import get_db
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
-#  ----
-# |TODO|
-#  ----
-# 4. Handle user specific authentication.
-# 5. Make sure only an admin can create a post.
-# 6. Special authentication for an admin user and a normal user.
-
-
 #  -------
 # |HELPERS|
 #  -------
 def rows_to_dict(rows):
     return [dict(row) for row in rows]
+
+
+#  ---------------------
+# |DEFINITION OF A TOKEN|
+#  ---------------------
+class Token(object):
+    def __init__(self, id, name, time, password):
+        self.id = id
+        self.name = name
+        self.time = time
+        self.password = password
 
 
 #  -------------
@@ -52,11 +59,25 @@ def handle_error(error):
 #  --------------
 # |AUTHENTICATION|
 #  --------------
-def check_auth(username, password):
-    pass
+def check_auth(token):
+    db = get_db()
+    user = pickle.loads(base64.b64decode(token))
+    user_vals = db.execute(
+                "SELECT username, password FROM user WHERE id = ?", (user.id,)
+            ).fetchone()
+    return user.name == user_vals[0] and user.password == user_vals[1]
 
-def authenticate():
-    message = {"error": "Unauthorized"}
+def check_admin(token):
+    db = get_db()
+    admin = pickle.loads(base64.b64decode(token))
+    admin_vals = db.execute(
+                 "SELECT username, password FROM user WHERE username = 'admin'"
+                 ).fetchone()
+    return admin.name == "admin" and admin.password == admin_vals[1]
+
+
+def authenticate(message):
+    message = {"error": message}
     response = jsonify(message)
     response.status_code = 401
     return response
@@ -64,12 +85,24 @@ def authenticate():
 def requires_auth(f):
     @wraps(f)
     def decorated(*args, **kwargs):
-        auth = request.authorization
-        if not auth:
-            return authenticate()
+        token = request.cookies.get('token')
+        if not token:
+            return authenticate("Please login")
 
-        elif not check_auth(auth.username, auth.password):
-            return authenticate()
+        elif not check_auth(token):
+            return authenticate("Invalid token")
+        return f(*args, **kwargs)
+    return decorated
+
+def requires_admin(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.cookies.get('token')
+        if not token:
+            return authenticate("Requires admin rights")
+
+        elif not check_admin(token):
+            return authenticate("Invalid admin token")
         return f(*args, **kwargs)
     return decorated
 
@@ -113,16 +146,21 @@ def login():
         error = "Incorrect username or password."
 
     if error is None:
-        return Response(status=200)
+        token = base64.b64encode(pickle.dumps(Token(user[0], username, datetime.now(), user[2])))
+        response = make_response("Here is your token.", 200)
+        response.set_cookie('token', token)
+        return response
     raise Error(error)
 
 @bp.route('/user', methods=['GET'])
+@requires_auth
 def user_list():
     db = get_db()
     users = rows_to_dict(db.execute("SELECT id, username FROM user").fetchall())
     return jsonify(users)
 
 @bp.route('/user/<id>', methods=['GET', 'DELETE'])
+@requires_auth
 def user_detail(id):
     db = get_db()
     user = db.execute("SELECT username FROM user WHERE id = ?", (id,)).fetchone()
@@ -136,6 +174,7 @@ def user_detail(id):
     return jsonify(dict(user))
 
 @bp.route('/post', methods=['POST'])
+@requires_admin
 def post_create():
     body = request.form['body']
     title = request.form['title']
@@ -158,6 +197,7 @@ def post_create():
     raise Error(error, status_code=400)
 
 @bp.route('/post', methods=['GET'])
+@requires_auth
 def post_list():
     db = get_db()
     posts = db.execute(
@@ -168,6 +208,7 @@ def post_list():
     return jsonify(rows_to_dict(posts))
 
 @bp.route('/post/<id>', methods=['GET', 'DELETE'])
+@requires_admin
 def post_detail(id):
     db = get_db()
     post = db.execute(
@@ -186,6 +227,7 @@ def post_detail(id):
     return jsonify(dict(post))
 
 @bp.route('/comment', methods=['POST'])
+@requires_auth
 def comment_create():
     body = request.form['body']
     post = request.form['post_id']
@@ -206,17 +248,27 @@ def comment_create():
     raise Error(error, status_code=400)
 
 @bp.route('/comment', methods=['GET'])
+@requires_auth
 def comment_list():
     db = get_db()
-    comments = db.execute(
-               "SELECT c.id, post_id, c.author_id, c.created, c.body, username"
-               " FROM comment c JOIN post p ON c.post_id = p.id"
-               " JOIN user u ON c.author_id = u.id"
-               " ORDER BY c.created ASC"
-               ).fetchall()
+    if "post_id" in request.args:
+        comments = db.execute(
+                   "SELECT c.id, post_id, c.author_id, c.created, c.body, username"
+                   " FROM comment c JOIN user u ON c.author_id = u.id"
+                   " WHERE post_id = ?"
+                   " ORDER BY c.created ASC",
+                   (request.args['post_id'],)
+                   ).fetchall()
+    else:
+        comments = db.execute(
+                   "SELECT c.id, post_id, c.author_id, c.created, c.body, username"
+                   " FROM comment c JOIN user u ON c.author_id = u.id"
+                   " ORDER BY c.created ASC"
+                   ).fetchall()
     return jsonify(rows_to_dict(comments))
 
 @bp.route('/comment/<id>', methods=['GET', 'DELETE'])
+@requires_auth
 def comment_detail(id):
     db = get_db()
     comment = db.execute(
