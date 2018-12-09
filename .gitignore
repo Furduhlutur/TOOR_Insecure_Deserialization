@@ -1,9 +1,9 @@
-restvenv/
+Backend/restvenv/
 
 *.pyc
-__pycache__/
+Backend/__pycache__/
 
-instance/
+Backend/instance/
 
 .pytest_cache/
 .coverage
