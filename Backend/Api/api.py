@@ -157,7 +157,9 @@ def login():
 def user_list():
     db = get_db()
     users = rows_to_dict(db.execute("SELECT id, username FROM user").fetchall())
-    return jsonify(users)
+    response = jsonify(users)
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @bp.route('/user/<id>', methods=['GET', 'DELETE'])
 @requires_auth
@@ -171,7 +173,9 @@ def user_detail(id):
     if request.method == 'DELETE':
         db.execute("DELETE FROM user WHERE id = ?", (id,))
         db.commit()
-    return jsonify(dict(user))
+    response = jsonify(dict(user))
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @bp.route('/post', methods=['POST'])
 @requires_admin
@@ -193,7 +197,9 @@ def post_create():
                 (title, body, author)
                 )
         db.commit()
-        return Response(status=201)
+        response = make_response("Created", 201)
+        response.headers['Access-Control-Allow-Origin'] = "*"
+        return response
     raise Error(error, status_code=400)
 
 @bp.route('/post', methods=['GET'])
@@ -205,7 +211,9 @@ def post_list():
             " FROM post p JOIN user u ON p.author_id = u.id"
             " ORDER BY created DESC"
             ).fetchall()
-    return jsonify(rows_to_dict(posts))
+    response = jsonify(rows_to_dict(posts))
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @bp.route('/post/<id>', methods=['GET', 'DELETE'])
 @requires_admin
@@ -224,7 +232,9 @@ def post_detail(id):
     if request.method == 'DELETE':
         db.execute("DELETE FROM post WHERE id = ?", (id,))
         db.commit()
-    return jsonify(dict(post))
+    response = jsonify(dict(post))
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @bp.route('/comment', methods=['POST'])
 @requires_auth
@@ -244,7 +254,9 @@ def comment_create():
                 (body, author, post)
                 )
         db.commit()
-        return Response(status=201)
+        response = make_response("Created", 201)
+        response.headers['Access-Control-Allow-Origin'] = "*"
+        return response
     raise Error(error, status_code=400)
 
 @bp.route('/comment', methods=['GET'])
@@ -265,7 +277,9 @@ def comment_list():
                    " FROM comment c JOIN user u ON c.author_id = u.id"
                    " ORDER BY c.created ASC"
                    ).fetchall()
-    return jsonify(rows_to_dict(comments))
+    response = jsonify(rows_to_dict(comments))
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
 @bp.route('/comment/<id>', methods=['GET', 'DELETE'])
 @requires_auth
@@ -285,5 +299,7 @@ def comment_detail(id):
     if request.method == 'DELETE':
         db.execute("DELETE FROM comment WHERE id = ?", (id,))
         db.commit()
-    return jsonify(dict(comment))
+    response = jsonify(dict(comment))
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    return response
 
