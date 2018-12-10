@@ -13,3 +13,5 @@ dist/
 build/
 *.egg-info/
 node_modules/
+
+sample-module-master

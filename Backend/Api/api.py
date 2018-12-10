@@ -1,11 +1,11 @@
 import pickle
 import base64
-from datetime import datetime
-from functools import wraps
+from datetime import datetime, timedelta
+from functools import wraps, update_wrapper
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, Response, jsonify,
-    make_response
+    make_response, current_app
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -107,10 +107,57 @@ def requires_admin(f):
     return decorated
 
 
+#  -------------
+# |CORS SETTINGS|
+#  -------------
+def crossdomain(origin=None, methods=None, headers=None, max_age=21600,
+                attach_to_all=True, automatic_options=True):
+    if methods is not None:
+        methods = ', '.join(sorted(x.upper() for x in methods))
+    if headers is not None and not isinstance(headers, list):
+        headers = ', '.join(x.upper() for x in headers)
+    if not isinstance(origin, list):
+        origin = ', '.join(origin)
+    if isinstance(max_age, timedelta):
+        max_age = max_age.total_seconds()
+
+    def get_methods():
+        if methods is not None:
+            return methods
+
+        options_resp = current_app.make_default_options_response()
+        return options_resp.headers['allow']
+
+    def decorator(f):
+        def wrapped_function(*args, **kwargs):
+            if automatic_options and request.method == 'OPTIONS':
+                resp = current_app.make_default_options_response()
+            else:
+                resp = make_response(f(*args, **kwargs))
+            if not attach_to_all and request.method != 'OPTIONS':
+                return resp
+
+            h = resp.headers
+            h['Access-Control-Allow-Origin'] = origin
+            h['Access-Control-Allow-Methods'] = get_methods()
+            h['Access-Control-Max-Age'] = str(max_age)
+            h['Access-Control-Allow-Credentials'] = 'true'
+            h['Access-Control-Allow-Headers'] = \
+                    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+            if headers is not None:
+                h['Access-Control-Allow-Headers'] = headers
+            return resp
+
+        f.provide_automatic_options = False
+        return update_wrapper(wrapped_function, f)
+    return decorator
+
+
 #  ---------
 # |ENDPOINTS|
 #  ---------
-@bp.route('/register', methods=['POST'])
+@bp.route('/register', methods=['POST', 'OPTION'])
+@crossdomain(origin='*')
 def register():
     username = request.form['username']
     password = request.form['password']
@@ -132,7 +179,8 @@ def register():
         return Response(status=201)
     raise Error(error)
 
-@bp.route('/login', methods=['POST'])
+@bp.route('/login', methods=['POST', 'OPTION'])
+@crossdomain(origin='*')
 def login():
     username = request.form['username']
     password = request.form['password']

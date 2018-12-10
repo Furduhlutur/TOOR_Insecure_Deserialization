@@ -1,1 +1,1 @@
-RestCTF{rest_can_be_cool_if_secure}
+Not the real flag!
