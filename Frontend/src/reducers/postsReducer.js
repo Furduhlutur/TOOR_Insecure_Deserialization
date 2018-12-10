@@ -2,7 +2,7 @@ import { GET_POSTS, ERROR_POSTS } from "../constants";
 
 const initialState = {
   posts: [],
-  error: ""
+  error: "Empty"
 };
 
 const postsReducer = (state = initialState, action) => {

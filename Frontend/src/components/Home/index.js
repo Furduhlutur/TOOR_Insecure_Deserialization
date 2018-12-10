@@ -18,7 +18,9 @@ class Home extends Component {
 
   render() {
     const { posts, error } = this.props;
-    let postsJSX = posts.map(post => <Post key={post.id} post={post} />);
+    let postsJSX = posts.map
+      ? posts.map(post => <Post key={post.id} post={post} />)
+      : null;
     if (error) {
       postsJSX = <div>The posts could not be fetched at this time.</div>;
     }
