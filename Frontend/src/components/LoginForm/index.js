@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { TextField, Paper, Button } from "@material-ui/core";
+import { PropTypes } from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
@@ -22,22 +23,24 @@ class LoginForm extends Component {
 
   handleSubmit = () => {
     const { name, pass } = this.state;
-    const { authenticate } = this.props;
-    authenticate(name, pass);
+    const { authenticate, title } = this.props;
+
+    authenticate(name, pass, title.toLowerCase() === "login");
+    this.setState({ name: "", pass: "" });
   };
 
   render() {
     const { name, pass } = this.state;
-    console.log(name);
+    let { title } = this.props;
     return (
-      <form
+      <div
         className={styles["container"]}
         autoComplete="off"
-        onSubmit={() => this.handleSubmit()}
+        onSubmit={() => this.handleSubmit(title)}
       >
         <Paper className={styles["jumbotron"]}>
+          <h3 className={styles["title"]}>{title}</h3>
           <TextField
-            id="standard-name"
             label="Name"
             name="name"
             value={name}
@@ -45,8 +48,8 @@ class LoginForm extends Component {
             margin="normal"
           />
           <TextField
-            id="standard-name"
             label="Password"
+            type="password"
             name="pass"
             value={pass}
             onChange={this.handleChange("pass")}
@@ -55,15 +58,24 @@ class LoginForm extends Component {
           <Button
             variant="contained"
             color="primary"
+            onClick={() => this.handleSubmit()}
             className={styles["login-button"]}
           >
-            Login
+            {title}
           </Button>
         </Paper>
-      </form>
+      </div>
     );
   }
 }
+
+LoginForm.propTypes = {
+  title: PropTypes.string
+};
+
+LoginForm.defaultProps = {
+  title: "Login"
+};
 
 export default connect(
   null,

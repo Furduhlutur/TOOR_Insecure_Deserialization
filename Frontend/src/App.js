@@ -1,15 +1,18 @@
 // Added Components
 import React, { Component } from "react";
-import store from "./store";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
-// Our Components
+// Our stuff
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Home from "./components/Home";
 import LoginForm from "./components/LoginForm";
+import RegisterForm from "./components/RegisterForm";
 import NavBar from "./components/NavBar";
+import reducers from "./reducers";
 
 import "./App.css";
 
@@ -33,13 +36,14 @@ const theme = createMuiTheme({
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={createStore(reducers, applyMiddleware(thunk))}>
         <MuiThemeProvider theme={theme}>
           <Router>
             <div className="grow">
               <NavBar />
               <div className="grow">
                 <Switch>
+                  <Route exact path="/register" component={RegisterForm} />
                   <Route exact path="/login" component={LoginForm} />
                   <PrivateRoute exact path="/" component={Home} />
                 </Switch>

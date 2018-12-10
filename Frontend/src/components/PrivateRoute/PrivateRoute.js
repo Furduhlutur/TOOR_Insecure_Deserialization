@@ -3,8 +3,9 @@ import { Redirect, Route } from "react-router-dom";
 
 class PrivateRoute extends Component {
   render() {
-    let isLoggedIn = false;
-    let rest = null;
+    // TODO: validate if token is here
+    const { component: Component, ...rest } = this.props;
+    let isLoggedIn = true;
     return (
       <Route
         {...rest}

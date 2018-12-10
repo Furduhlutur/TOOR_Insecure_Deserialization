@@ -4,6 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: #0d5842; */
 }
 
 .jumbotron {
@@ -17,4 +18,8 @@
 
 .login-button {
   margin-top: 33px !important;
+}
+
+.title {
+  /* font-family:  */
 }
