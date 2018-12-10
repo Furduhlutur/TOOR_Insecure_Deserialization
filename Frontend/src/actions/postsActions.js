@@ -20,14 +20,11 @@ export const getPosts = () => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
     console.log(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`);
     return (
-      axios
-        .get(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`, {
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Access-Control-Allow-Origin": `${REACT_APP_API}`
-          }
-        })
+      fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      })
         //   .then(res => res.json())
         .then(resp => {
           console.log(resp);

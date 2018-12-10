@@ -26,13 +26,12 @@ export const authenticate = (username, password, login) => {
     body.set("username", username);
     body.set("password", password);
     const path = login ? "/api/login" : "/api/register";
+    const { REACT_APP_API, REACT_APP_PORT } = process.env;
     // return fetch(path, {
     return (
-      fetch(process.env.REACT_APP_API + path, {
+      fetch(`${REACT_APP_API}:${REACT_APP_PORT}` + path, {
         method: "POST",
-        mode: "no-cors",
-        body: body,
-        credentials: "same-origin"
+        body: body
       })
         // .then(res => {
         //   console.log(res);
