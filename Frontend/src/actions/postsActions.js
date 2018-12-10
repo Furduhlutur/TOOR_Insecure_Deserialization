@@ -18,22 +18,11 @@ const getPostsError = err => {
 export const getPosts = () => {
   return dispatch => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
-    console.log(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`);
-    return (
-      fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
+    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`)
+      .then(res => res.json())
+      .then(resp => {
+        dispatch(getPostsSuccess(resp));
       })
-        //   .then(res => res.json())
-        .then(resp => {
-          console.log(resp);
-          if (resp.status === 200) {
-            console.log(resp);
-            // dispatch(getPostsSuccess(resp.));
-          }
-        })
-        .catch(error => dispatch(getPostsError(error)))
-    );
+      .catch(error => dispatch(getPostsError(error)));
   };
 };
