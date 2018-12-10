@@ -147,7 +147,7 @@ def login():
 
     if error is None:
         token = base64.b64encode(pickle.dumps(Token(user[0], username, datetime.now(), user[2])))
-        response = make_response("Here is your token.", 200)
+        response = jsonify({"username": username})
         response.set_cookie('token', token)
         return response
     raise Error(error)
