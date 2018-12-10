@@ -7,11 +7,13 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_SUCCESS || REGISTER_SUCCESS:
+    case LOGIN_SUCCESS:
       return {
         username: action.payload,
         error: ""
       };
+    case REGISTER_SUCCESS:
+      return initialState;
     case ERROR:
       return {
         username: "",
