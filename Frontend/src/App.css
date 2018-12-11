@@ -6,5 +6,6 @@ body,
 }
 
 body {
-  background: whitesmoke;
+  background: url("https://www.myjewishlearning.com/wp-content/uploads/2009/06/shutterstock_99946823.jpg");
+  background-size: cover;
 }

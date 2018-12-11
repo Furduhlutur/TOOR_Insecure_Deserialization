@@ -1,0 +1,22 @@
+.comment-field {
+  width: 80%;
+}
+
+.comment-field-w-button {
+  display: flex;
+  width: 65%;
+}
+
+.lefty {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}

@@ -11,6 +11,7 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 
 // CSS
 import styles from "./NavBar.module.css";
+
 class NavBar extends Component {
   componentDidMount() {
     const { username, isLoggedIn } = this.props;
@@ -34,7 +35,7 @@ class NavBar extends Component {
     if (username) {
       links = (
         <div>
-          <div>{username}</div>
+          <span>{username}</span>
           <Link
             to="/register"
             className={styles["link"]}

@@ -40,17 +40,21 @@ class Post extends Component {
     const { title, body, author_id, id, username } = this.props.post;
     const { maxLength } = this.state;
     return (
-      <Paper className={styles["card"]}>
-        <h3>{title}</h3>
-        <div>
-          {this.trimBody(body)}
-          {body.length > maxLength ? `${this.trimBody(body)}...` : body}
+      <div className={styles["card"]}>
+        <Paper className={styles["card"]}>
+          <h3>{title}</h3>
+          <div>
+            {this.trimBody(body)}
+            {body.length > maxLength ? `${this.trimBody(body)}...` : body}
+          </div>
+          <div>Written by: {username}</div>
+        </Paper>
+        <div className={styles["comment-section"]}>
+          <h3>Comments</h3>
+          <hr />
+          <Comments info={[id, author_id]} />
         </div>
-        <div>Written by: {username}</div>
-        <h3>Comments</h3>
-        <hr />
-        <Comments info={[id, author_id]} />
-      </Paper>
+      </div>
     );
   }
 }
