@@ -7,7 +7,7 @@ import thunk from "redux-thunk";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 // Our stuff
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+// import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Home from "./components/Home";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
@@ -45,7 +45,7 @@ class App extends Component {
                 <Switch>
                   <Route exact path="/register" component={RegisterForm} />
                   <Route exact path="/login" component={LoginForm} />
-                  <PrivateRoute exact path="/" component={Home} />
+                  <Route exact path="/" component={Home} />
                 </Switch>
               </div>
             </div>

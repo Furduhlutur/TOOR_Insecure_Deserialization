@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Redirect } from "react-router-dom";
 import { TextField, Paper, Button } from "@material-ui/core";
 import { PropTypes } from "prop-types";
 
@@ -31,7 +32,10 @@ class LoginForm extends Component {
 
   render() {
     const { name, pass } = this.state;
-    let { title } = this.props;
+    let { title, username } = this.props;
+    if (username) {
+      return <Redirect to="/" />;
+    }
     return (
       <div
         className={styles["container"]}
@@ -77,7 +81,13 @@ LoginForm.defaultProps = {
   title: "Login"
 };
 
+const mapStateToProps = ({ auth }) => {
+  return {
+    username: auth.username
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { authenticate }
 )(LoginForm);

@@ -63,6 +63,7 @@ export const comment = (comm, postId, authorId) => {
     })
       .then(res => res.json())
       .then(resp => {
+        console.log(resp);
         dispatch(commentSuccess(resp));
       })
       .catch(err => {
