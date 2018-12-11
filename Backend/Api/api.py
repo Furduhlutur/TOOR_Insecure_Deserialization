@@ -147,7 +147,8 @@ def login():
         error = "Incorrect username or password."
 
     if error is None:
-        token = base64.b64encode(pickle.dumps(Token(user[0], username, datetime.now(), user[2])))
+        token = base64.b64encode(pickle.dumps(Token(user['id'], username,
+                                                    datetime.now(), user['password'])))
         response = jsonify({"username": username})
         response.set_cookie('token', token)
         response.headers['Access-Control-Allow-Credentials'] = "true"
@@ -243,7 +244,7 @@ def post_detail(id):
 def comment_create():
     body = request.form['body']
     post = request.form['post_id']
-    author = request.form['author_id']
+    author = request.form['username']
     error = None
 
     if not body:
@@ -251,9 +252,10 @@ def comment_create():
 
     if error is None:
         db = get_db()
+        author_id = db.execute("SELECT id FROM user WHERE username = ?", (author,)).fetchone()[0]
         db.execute(
                 "INSERT INTO comment (body, author_id, post_id) VALUES (?, ?, ?)",
-                (body, author, post)
+                (body, author_id, post)
                 )
         db.commit()
         comment_id = db.execute("SELECT max(id) FROM comment").fetchone()[0]
