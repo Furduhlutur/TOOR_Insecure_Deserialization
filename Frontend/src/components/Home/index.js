@@ -17,7 +17,8 @@ class Home extends Component {
   }
 
   render() {
-    const { posts, error } = this.props;
+    const { posts, error, user } = this.props;
+    console.log(user);
     let postsJSX = posts.map
       ? posts.map(post => <Post key={post.id} post={post} />)
       : null;

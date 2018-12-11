@@ -34,7 +34,6 @@ class Comments extends Component {
     const { comments, comment, info } = this.props;
     const { currentComment } = this.state;
     let postId = info[0];
-    console.log(comments);
 
     let commentsJSX = comments.map
       ? comments

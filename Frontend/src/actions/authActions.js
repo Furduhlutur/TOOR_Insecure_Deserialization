@@ -36,9 +36,7 @@ export const authenticate = (username, password, login) => {
     })
       .then(res => res.json())
       .then(resp => {
-        if (resp.status !== 200) {
-          dispatch(errorStuff(resp.error));
-        } else if (login) {
+        if (login) {
           dispatch(loginSuccess(resp.username));
         } else {
           dispatch(regsterSuccess());
