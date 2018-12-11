@@ -4,18 +4,53 @@ import { PropTypes } from "prop-types";
 // Material
 import { Paper } from "@material-ui/core";
 
+// Our Components
+import Comments from "../Comments";
+
 //CSS
 import styles from "./Post.module.css";
 
 class Post extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      maxLength: 1000
+    };
+  }
+
+  componentDidMount() {}
+
+  trimBody(post) {
+    const { maxLength } = this.state;
+
+    // Props to: https://stackoverflow.com/questions/5454235/shorten-string-without-cutting-words-in-javascript
+    //trim the string to the maximum length
+    let trimmedString = post.substr(0, maxLength);
+
+    //re-trim if we are in the middle of a word
+    trimmedString = trimmedString.substr(
+      0,
+      Math.min(trimmedString.length, trimmedString.lastIndexOf(" "))
+    );
+
+    return trimmedString;
+  }
+
   render() {
     const { title, body, author_id, id, username } = this.props.post;
+    const { maxLength } = this.state;
     // TODO: get comments
     return (
       <Paper className={styles["card"]}>
         <h3>{title}</h3>
-        <div>{body}</div>
+        <div>
+          {this.trimBody(body)}
+          {body.length > maxLength ? `${this.trimBody(body)}...` : body}
+        </div>
         <div>Written by: {username}</div>
+        <h3>Comments</h3>
+        <hr />
+        <Comments info={[id, author_id]} />
       </Paper>
     );
   }

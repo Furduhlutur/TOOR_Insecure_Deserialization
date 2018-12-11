@@ -31,7 +31,8 @@ export const authenticate = (username, password, login) => {
 
     return fetch(`${REACT_APP_API}:${REACT_APP_PORT}` + path, {
       method: "POST",
-      body: body
+      body: body,
+      credentials: "include"
     })
       .then(res => res.json())
       .then(resp => {

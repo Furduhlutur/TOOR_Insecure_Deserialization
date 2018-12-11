@@ -1,5 +1,4 @@
 import { GET_POSTS, ERROR_POSTS } from "../constants";
-const axios = require("axios");
 
 const getPostsSuccess = posts => {
   return {
@@ -18,7 +17,9 @@ const getPostsError = err => {
 export const getPosts = () => {
   return dispatch => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
-    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`)
+    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`, {
+      credentials: "include"
+    })
       .then(res => res.json())
       .then(resp => {
         dispatch(getPostsSuccess(resp));
