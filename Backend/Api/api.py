@@ -62,7 +62,6 @@ def handle_error(error):
 def check_auth(token):
     db = get_db()
     user = pickle.loads(base64.b64decode(token))
-    print(f"id: {user.id}, name: {user.name}, time: {user.time}, password: {user.password}")
     user_vals = db.execute(
                 "SELECT username, password FROM user WHERE id = ?", (user.id,)
             ).fetchone()
@@ -75,7 +74,6 @@ def check_admin(token):
                  "SELECT username, password FROM user WHERE username = 'admin'"
                  ).fetchone()
     return admin.name == "admin" and admin.password == admin_vals[1]
-
 
 def authenticate(message):
     message = {"error": message}
@@ -258,11 +256,8 @@ def comment_create():
                 (body, author, post)
                 )
         db.commit()
-        # response = make_response("Created", 201)
-        # response.headers['Access-Control-Allow-Credentials'] = "true"
-        # return response
-        last_id = db.execute("SELECT last_insert_rowid()")
-        return comment_detail(last_id)
+        comment_id = db.execute("SELECT max(id) FROM comment").fetchone()[0]
+        return comment_detail(comment_id)
     raise Error(error, status_code=400)
 
 @bp.route('/comment', methods=['GET'])
