@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR } from "../constants";
+import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR, LOG_OUT } from "../constants";
 
 const loginSuccess = username => {
   return {
@@ -20,6 +20,35 @@ const errorStuff = error => {
   };
 };
 
+const hasTokenCookie = () => {
+  let cookies = document.cookie.split(";");
+  for (let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i];
+    if (cookie.startsWith("token")) {
+      return cookie.split("=")[1];
+    }
+  }
+  return "";
+};
+
+export const logOut = () => dispatch => {
+  localStorage.setItem("username", "");
+  document.cookie = "token=;";
+  dispatch({
+    type: LOG_OUT
+  });
+};
+
+export const isLoggedIn = () => dispatch => {
+  let token = hasTokenCookie();
+  if (token) {
+    let username = localStorage.getItem("username");
+    if (username) {
+      dispatch(loginSuccess(username));
+    }
+  }
+};
+
 export const authenticate = (username, password, login) => {
   return dispatch => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
@@ -37,6 +66,7 @@ export const authenticate = (username, password, login) => {
       .then(res => res.json())
       .then(resp => {
         if (login) {
+          localStorage.setItem("username", resp.username);
           dispatch(loginSuccess(resp.username));
         } else {
           dispatch(regsterSuccess());

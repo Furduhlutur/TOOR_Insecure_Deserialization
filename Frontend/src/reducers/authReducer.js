@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR } from "../constants";
+import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR, LOG_OUT } from "../constants";
 
 const initialState = {
   username: "",
@@ -6,7 +6,6 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-  console.log(action);
   switch (action.type) {
     case LOGIN_SUCCESS:
       return {
@@ -20,6 +19,8 @@ const authReducer = (state = initialState, action) => {
         username: "",
         error: action.payload
       };
+    case LOG_OUT:
+      return initialState;
     default:
       return state;
   }

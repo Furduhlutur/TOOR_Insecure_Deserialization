@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 // Redux
 import { connect } from "react-redux";
+import { isLoggedIn, logOut } from "../../actions/authActions";
 
 // Material
 import { AppBar, Button, Toolbar } from "@material-ui/core";
@@ -11,8 +12,14 @@ import { AppBar, Button, Toolbar } from "@material-ui/core";
 // CSS
 import styles from "./NavBar.module.css";
 class NavBar extends Component {
+  componentDidMount() {
+    const { username, isLoggedIn } = this.props;
+    if (!username) {
+      isLoggedIn();
+    }
+  }
   render() {
-    const { username } = this.props;
+    const { username, logOut } = this.props;
     let links = (
       <div>
         <Link to="/login" className={styles["link"]}>
@@ -24,8 +31,6 @@ class NavBar extends Component {
       </div>
     );
 
-    console.log(username);
-
     if (username) {
       links = (
         <div>
@@ -33,7 +38,7 @@ class NavBar extends Component {
           <Link
             to="/register"
             className={styles["link"]}
-            onClick={() => (document.cookie = "token=;")}
+            onClick={() => logOut()}
           >
             <Button color="inherit">Log Out</Button>
           </Link>
@@ -56,5 +61,5 @@ const mapStateToProps = ({ auth }) => {
 
 export default connect(
   mapStateToProps,
-  null
+  { isLoggedIn, logOut }
 )(NavBar);
