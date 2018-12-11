@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { Redirect, Route } from "react-router-dom";
+import { connect } from "react-redux";
 
 class PrivateRoute extends Component {
   render() {
     // TODO: validate if token is here
-    const { component: Component, ...rest } = this.props;
-    let isLoggedIn = true;
+    const { username, component: Component, ...rest } = this.props;
+    let isLoggedIn = username ? true : false;
     return (
       <Route
         {...rest}
@@ -22,5 +23,11 @@ class PrivateRoute extends Component {
     );
   }
 }
+const mapStateToProps = ({ auth }) => ({
+  username: auth.username
+});
 
-export default PrivateRoute;
+export default connect(
+  mapStateToProps,
+  null
+)(PrivateRoute);
