@@ -1,9 +1,8 @@
 import React from "react";
 
 const Comment = ({ comm }) => {
-  console.log(comm);
   const { body, username, created } = comm;
-  console.log("henlo");
+  console.log(body);
   return (
     <div>
       <h5>{username}</h5>

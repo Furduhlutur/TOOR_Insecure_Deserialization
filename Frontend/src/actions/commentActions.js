@@ -19,13 +19,10 @@ const getCommentsError = err => {
   };
 };
 
-const commentSuccess = (comm, postId) => {
+const commentSuccess = comm => {
   return {
     type: COMMENT,
-    payload: {
-      comm,
-      postId
-    }
+    payload: comm
   };
 };
 
@@ -52,7 +49,6 @@ export const getComments = () => {
 
 export const comment = (comm, postId, authorId) => {
   return dispatch => {
-    console.log(comm, authorId, postId);
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
 
     let body = new FormData();
@@ -65,11 +61,11 @@ export const comment = (comm, postId, authorId) => {
       body: body,
       credentials: "include"
     })
-      .then(_ => {
-        dispatch(commentSuccess(comm, postId));
+      .then(res => res.json())
+      .then(resp => {
+        dispatch(commentSuccess(resp));
       })
       .catch(err => {
-        console.error(err);
         dispatch(commentFailure(err));
       });
   };

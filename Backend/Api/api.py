@@ -129,7 +129,9 @@ def register():
                    (username, generate_password_hash(password))
         )
         db.commit()
-        return Response(status=201)
+        response = make_response("Created", 201)
+        response.headers['Access-Control-Allow-Credentials'] = "true"
+        return response
     raise Error(error)
 
 @bp.route('/login', methods=['POST', 'OPTION'])
@@ -149,6 +151,7 @@ def login():
         token = base64.b64encode(pickle.dumps(Token(user[0], username, datetime.now(), user[2])))
         response = jsonify({"username": username})
         response.set_cookie('token', token)
+        response.headers['Access-Control-Allow-Credentials'] = "true"
         return response
     raise Error(error)
 

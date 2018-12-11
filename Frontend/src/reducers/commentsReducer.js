@@ -6,7 +6,7 @@ import {
 } from "../constants";
 
 const initialState = {
-  comments: {},
+  comments: [],
   error: ""
 };
 
@@ -23,17 +23,11 @@ const commentsReducer = (state = initialState, action) => {
         error: action.payload
       };
     case COMMENT:
-      const { postId, comm } = action.payload;
       const { comments } = state;
-      let obj = {
+      return {
         ...state,
-        comments: {
-          ...comments,
-          [postId]: comm
-        }
+        comments: [...comments, action.payload]
       };
-      console.log(obj);
-      return obj;
     default:
       return state;
   }

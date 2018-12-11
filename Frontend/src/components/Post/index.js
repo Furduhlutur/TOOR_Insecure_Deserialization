@@ -39,7 +39,6 @@ class Post extends Component {
   render() {
     const { title, body, author_id, id, username } = this.props.post;
     const { maxLength } = this.state;
-    // TODO: get comments
     return (
       <Paper className={styles["card"]}>
         <h3>{title}</h3>

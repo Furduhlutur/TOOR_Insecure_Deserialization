@@ -33,11 +33,16 @@ class Comments extends Component {
   render() {
     const { comments, comment, info } = this.props;
     const { currentComment } = this.state;
+    let postId = info[0];
+    console.log(comments);
 
     let commentsJSX = comments.map
-      ? comments.map(comm => <Comment key={comm.id} comm={comm} />)
+      ? comments
+          .filter(post => post.post_id === postId)
+          .map(comm => {
+            return <Comment key={comm.id} comm={comm} />;
+          })
       : null;
-    console.log(commentsJSX);
     return (
       <div>
         <div>{commentsJSX}</div>
