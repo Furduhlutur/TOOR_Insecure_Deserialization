@@ -62,6 +62,7 @@ def handle_error(error):
 def check_auth(token):
     db = get_db()
     user = pickle.loads(base64.b64decode(token))
+    print(f"id: {user.id}, name: {user.name}, time: {user.time}, password: {user.password}")
     user_vals = db.execute(
                 "SELECT username, password FROM user WHERE id = ?", (user.id,)
             ).fetchone()
@@ -110,7 +111,7 @@ def requires_admin(f):
 #  ---------
 # |ENDPOINTS|
 #  ---------
-@bp.route('/register', methods=['POST', 'OPTION'])
+@bp.route('/register', methods=['POST'])
 def register():
     username = request.form['username']
     password = request.form['password']
@@ -134,7 +135,7 @@ def register():
         return response
     raise Error(error)
 
-@bp.route('/login', methods=['POST', 'OPTION'])
+@bp.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
     password = request.form['password']
@@ -257,9 +258,10 @@ def comment_create():
                 (body, author, post)
                 )
         db.commit()
-        response = make_response("Created", 201)
-        response.headers['Access-Control-Allow-Credentials'] = "true"
-        return response
+        # response = make_response("Created", 201)
+        # response.headers['Access-Control-Allow-Credentials'] = "true"
+        # return response
+        return comment_detail(db.lastrowid)
     raise Error(error, status_code=400)
 
 @bp.route('/comment', methods=['GET'])
