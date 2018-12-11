@@ -261,7 +261,8 @@ def comment_create():
         # response = make_response("Created", 201)
         # response.headers['Access-Control-Allow-Credentials'] = "true"
         # return response
-        return comment_detail(db.lastrowid)
+        last_id = db.execute("SELECT last_insert_rowid()")
+        return comment_detail(last_id)
     raise Error(error, status_code=400)
 
 @bp.route('/comment', methods=['GET'])
