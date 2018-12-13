@@ -35,8 +35,7 @@ const commentFailure = err => {
 
 export const getComments = () => {
   return dispatch => {
-    const { REACT_APP_API, REACT_APP_PORT } = process.env;
-    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/comment`, {
+    return fetch("/api/comment", {
       credentials: "include"
     })
       .then(res => res.json())
@@ -49,14 +48,12 @@ export const getComments = () => {
 
 export const comment = (comm, postId, username) => {
   return dispatch => {
-    const { REACT_APP_API, REACT_APP_PORT } = process.env;
-
     let body = new FormData();
     body.set("body", comm);
     body.set("post_id", postId);
     body.set("username", username);
 
-    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/comment`, {
+    return fetch("/api/comment", {
       method: "POST",
       body: body,
       credentials: "include"
