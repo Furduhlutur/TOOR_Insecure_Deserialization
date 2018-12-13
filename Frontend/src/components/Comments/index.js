@@ -2,45 +2,50 @@ import React, { Component } from "react";
 
 // Redux
 import { connect } from "react-redux";
-import { getComments, comment } from "../../actions/commentActions";
+import { getComments } from "../../actions/commentActions";
 
-// MaterialUI
-import { TextField, Button } from "@material-ui/core";
+// MaterialUi
+import { Button } from "@material-ui/core";
 
 // Our components
 import Comment from "../Comment";
+import CommentField from "../CommentField";
 
 // CSS
 import styles from "./Comments.module.css";
 
 class Comments extends Component {
   componentDidMount() {
-    const { getComments } = this.props;
-    getComments();
+    const { getComments, username } = this.props;
+    if (username) {
+      getComments();
+    }
   }
 
   constructor(props) {
     super(props);
     this.state = {
-      currentComment: ""
+      revealComments: 3
     };
   }
 
-  comment() {
-    const { currentComment } = this.state;
-    const { comment, info } = this.props;
-    comment(currentComment, ...info);
-    this.setState({ currentComment: "" });
+  extendComments() {
+    const { comments, postId } = this.props;
+    let length = comments.filter(post => post.post_id === postId).length;
+    this.setState({ revealComments: length });
   }
 
-  handleChange = event => {
-    this.setState({ currentComment: event.target.value });
-  };
+  addComment() {
+    const { revealComments } = this.state;
+    this.setState({ revealComments: revealComments });
+  }
 
   render() {
-    const { currentComment } = this.state;
-    const { comments, info } = this.props;
-    let postId = info[0];
+    const { revealComments } = this.state;
+    const { comments, postId, username } = this.props;
+    if (!username) {
+      return null;
+    }
 
     let commentsJSX = comments.map
       ? comments
@@ -49,39 +54,43 @@ class Comments extends Component {
             return <Comment key={comm.id} comm={comm} />;
           })
       : null;
+
+    let commentLength = commentsJSX.length;
+
+    commentsJSX = commentsJSX.slice(-revealComments);
+
     return (
-      <div className={styles["container"]}>
-        <div className={styles["container"]}>{commentsJSX}</div>
-        <div className={styles["comment-field-w-button"]}>
-          <TextField
-            id="standard-with-placeholder"
-            placeholder="Comment..."
-            margin="normal"
-            value={currentComment}
-            onChange={this.handleChange}
-            className={styles["comment-field"]}
-          />
-          <div className={styles["lefty"]}>
+      <div className={styles["comment-section"]}>
+        <h3>Comments</h3>
+        {/* <hr /> */}
+        <div className={styles["container"]}>
+          {commentLength <= 3 || commentsJSX.length > 3 ? null : (
             <Button
-              variant="contained"
+              variant="outlined"
               color="secondary"
-              onClick={() => this.comment()}
+              onClick={() => this.extendComments()}
             >
-              Comment
+              Show all comments
             </Button>
-          </div>
+          )}
+          <div className={styles["container"]}>{commentsJSX}</div>
+          <CommentField
+            postId={postId}
+            addComment={this.addComment.bind(this)}
+          />
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ comments }) => ({
+const mapStateToProps = ({ comments, auth }) => ({
   comments: comments.comments,
-  error: comments.error
+  error: comments.error,
+  username: auth.username
 });
 
 export default connect(
   mapStateToProps,
-  { getComments, comment }
+  { getComments }
 )(Comments);

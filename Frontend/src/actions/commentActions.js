@@ -47,14 +47,14 @@ export const getComments = () => {
   };
 };
 
-export const comment = (comm, postId, authorId) => {
+export const comment = (comm, postId, username) => {
   return dispatch => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;
 
     let body = new FormData();
     body.set("body", comm);
     body.set("post_id", postId);
-    body.set("author_id", authorId);
+    body.set("username", username);
 
     return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/comment`, {
       method: "POST",
@@ -63,7 +63,6 @@ export const comment = (comm, postId, authorId) => {
     })
       .then(res => res.json())
       .then(resp => {
-        console.log(resp);
         dispatch(commentSuccess(resp));
       })
       .catch(err => {

@@ -1,0 +1,15 @@
+.snack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: red;
+}
+
+.title {
+  height: 100%;
+  width: 100%;
+  color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

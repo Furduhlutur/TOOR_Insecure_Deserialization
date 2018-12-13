@@ -10,6 +10,12 @@ import Comments from "../Comments";
 //CSS
 import styles from "./Post.module.css";
 
+// Images for first two posts..
+const images = [
+  "https://assets3.thrillist.com/v1/image/962161/size/tl-horizontal_main/why-i-hate-a-food-you-probably-love-pickles",
+  "https://migardener-myworksdesign.netdna-ssl.com/wp-content/uploads/2016/11/national-pickling-cucumber.jpg"
+];
+
 class Post extends Component {
   constructor(props) {
     super(props);
@@ -17,8 +23,6 @@ class Post extends Component {
       maxLength: 1000
     };
   }
-
-  componentDidMount() {}
 
   trimBody(post) {
     const { maxLength } = this.state;
@@ -37,11 +41,18 @@ class Post extends Component {
   }
 
   render() {
-    const { title, body, author_id, id, username } = this.props.post;
+    const { title, body, id, username } = this.props.post;
+    const image = images[id - 1];
+    const imageStyle = {
+      backgroundImage: `url(${image})`
+    };
     const { maxLength } = this.state;
     return (
       <div className={styles["card"]}>
         <Paper className={styles["card"]}>
+          <div className={styles["image"]} style={imageStyle}>
+            poop
+          </div>
           <h3>{title}</h3>
           <div>
             {this.trimBody(body)}
@@ -49,11 +60,7 @@ class Post extends Component {
           </div>
           <div>Written by: {username}</div>
         </Paper>
-        <div className={styles["comment-section"]}>
-          <h3>Comments</h3>
-          <hr />
-          <Comments info={[id, author_id]} />
-        </div>
+        <Comments postId={id} />
       </div>
     );
   }

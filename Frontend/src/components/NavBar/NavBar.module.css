@@ -1,4 +1,5 @@
-.container {
+.righty {
+  width: 50%;
   display: flex;
   justify-content: flex-end;
 }
@@ -6,4 +7,19 @@
 .link {
   text-decoration: none;
   color: white;
+}
+
+.logo {
+  background: url("https://static1.squarespace.com/static/592f64bd29687ffb1f7e482a/t/59341e7c5016e11115dc66dc/1496587902561/LittlePickle_Logo.png?format=1000w")
+    no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 51px;
+  width: 51px;
+}
+
+.lefty {
+  width: 50%;
+  display: flex;
+  justify-content: flex-start;
 }

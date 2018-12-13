@@ -5,12 +5,19 @@ import { PropTypes } from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
-import { authenticate } from "../../actions/authActions";
+import { authenticate, clearError } from "../../actions/authActions";
+
+// Our Components
+import ErrorSnack from "../ErrorSnack";
 
 //CSS
 import styles from "./LoginForm.module.css";
 
 class LoginForm extends Component {
+  componentDidMount() {
+    const { clearError } = this.props;
+    clearError();
+  }
   constructor(props) {
     super(props);
     this.state = {
@@ -30,9 +37,14 @@ class LoginForm extends Component {
     this.setState({ name: "", pass: "" });
   };
 
+  handleClose() {
+    const { clearError } = this.props;
+    clearError();
+  }
+
   render() {
     const { name, pass } = this.state;
-    let { title, username } = this.props;
+    let { title, username, error } = this.props;
     if (username) {
       return <Redirect to="/" />;
     }
@@ -45,7 +57,7 @@ class LoginForm extends Component {
         <Paper className={styles["jumbotron"]}>
           <h3 className={styles["title"]}>{title}</h3>
           <TextField
-            label="Name"
+            label="Username"
             name="name"
             value={name}
             onChange={this.handleChange("name")}
@@ -61,13 +73,18 @@ class LoginForm extends Component {
           />
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={() => this.handleSubmit()}
             className={styles["login-button"]}
           >
             {title}
           </Button>
         </Paper>
+        <ErrorSnack
+          open={error !== ""}
+          close={this.handleClose.bind(this)}
+          message={error}
+        />
       </div>
     );
   }
@@ -83,11 +100,12 @@ LoginForm.defaultProps = {
 
 const mapStateToProps = ({ auth }) => {
   return {
-    username: auth.username
+    username: auth.username,
+    error: auth.error
   };
 };
 
 export default connect(
   mapStateToProps,
-  { authenticate }
+  { authenticate, clearError }
 )(LoginForm);
