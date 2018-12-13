@@ -53,7 +53,7 @@ class LoginForm extends Component {
         <Paper className={styles["jumbotron"]}>
           <h3 className={styles["title"]}>{title}</h3>
           <TextField
-            label="Name"
+            label="Username"
             name="name"
             value={name}
             onChange={this.handleChange("name")}

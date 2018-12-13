@@ -61,10 +61,6 @@ export const isLoggedIn = () => dispatch => {
   }
 };
 
-const handleErrors = res => {
-  console.log(res.ok);
-};
-
 export const authenticate = (username, password, login) => {
   return dispatch => {
     const { REACT_APP_API, REACT_APP_PORT } = process.env;

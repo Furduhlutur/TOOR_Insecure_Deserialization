@@ -4,6 +4,9 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getComments } from "../../actions/commentActions";
 
+// MaterialUi
+import { Button } from "@material-ui/core";
+
 // Our components
 import Comment from "../Comment";
 import CommentField from "../CommentField";
@@ -19,12 +22,30 @@ class Comments extends Component {
     }
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      revealComments: 3
+    };
+  }
+
+  extendComments() {
+    const { comments, postId } = this.props;
+    let length = comments.filter(post => post.post_id === postId).length;
+    this.setState({ revealComments: length });
+  }
+
+  addComment() {
+    const { revealComments } = this.state;
+    this.setState({ revealComments: revealComments });
+  }
+
   render() {
-    const { comments, info, username } = this.props;
+    const { revealComments } = this.state;
+    const { comments, postId, username } = this.props;
     if (!username) {
       return null;
     }
-    let postId = info[0];
 
     let commentsJSX = comments.map
       ? comments
@@ -33,13 +54,30 @@ class Comments extends Component {
             return <Comment key={comm.id} comm={comm} />;
           })
       : null;
+
+    let commentLength = commentsJSX.length;
+
+    commentsJSX = commentsJSX.slice(-revealComments);
+
     return (
       <div className={styles["comment-section"]}>
         <h3>Comments</h3>
-        <hr />
+        {/* <hr /> */}
         <div className={styles["container"]}>
+          {commentLength <= 3 || commentsJSX.length > 3 ? null : (
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={() => this.extendComments()}
+            >
+              Show all comments
+            </Button>
+          )}
           <div className={styles["container"]}>{commentsJSX}</div>
-          <CommentField info={info} />
+          <CommentField
+            postId={postId}
+            addComment={this.addComment.bind(this)}
+          />
         </div>
       </div>
     );

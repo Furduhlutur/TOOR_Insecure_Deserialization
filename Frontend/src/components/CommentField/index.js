@@ -20,8 +20,9 @@ class CommentField extends Component {
 
   comment() {
     const { currentComment } = this.state;
-    const { comment, info } = this.props;
-    comment(currentComment, ...info);
+    const { comment, postId, username, addComment } = this.props;
+    addComment();
+    comment(currentComment, postId, username);
     this.setState({ currentComment: "" });
   }
 
@@ -55,7 +56,11 @@ class CommentField extends Component {
   }
 }
 
+const mapStateToProps = ({ auth }) => ({
+  username: auth.username
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   { comment }
 )(CommentField);

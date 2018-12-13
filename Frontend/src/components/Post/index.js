@@ -41,7 +41,7 @@ class Post extends Component {
   }
 
   render() {
-    const { title, body, author_id, id, username } = this.props.post;
+    const { title, body, id, username } = this.props.post;
     const image = images[id - 1];
     const imageStyle = {
       backgroundImage: `url(${image})`
@@ -60,7 +60,7 @@ class Post extends Component {
           </div>
           <div>Written by: {username}</div>
         </Paper>
-        <Comments info={[id, author_id]} />
+        <Comments postId={id} />
       </div>
     );
   }
