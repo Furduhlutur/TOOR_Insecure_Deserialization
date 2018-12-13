@@ -12,6 +12,6 @@ WORKDIR /Backend
 RUN chown root:adversary -R /Backend && chmod 755 -R /Backend
 
 ENV FLASK_APP=Backend/Api
-EXPOSE 5000
+EXPOSE 5000 1337
 RUN flask init-db
 CMD ["flask", "run", "-h", "0.0.0.0"]
