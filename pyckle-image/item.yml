@@ -5,3 +5,6 @@ url: pyckle
 points: 450
 flag: flag_pickle_are_distusting_anyways
 shared: false
+interface:
+    tools:
+        -TERMINAL
