@@ -53,6 +53,7 @@ class Error(Exception):
 def handle_error(error):
     response = jsonify(error.to_dict())
     response.status_code = error.status_code
+    response.headers['Access-Control-Allow-Credentials'] = "true"
     return response
 
 
