@@ -12,8 +12,8 @@ import styles from "./Post.module.css";
 
 // Images for first two posts..
 const images = [
-  "https://migardener-myworksdesign.netdna-ssl.com/wp-content/uploads/2016/11/national-pickling-cucumber.jpg",
-  "https://assets3.thrillist.com/v1/image/962161/size/tl-horizontal_main/why-i-hate-a-food-you-probably-love-pickles"
+  "https://assets3.thrillist.com/v1/image/962161/size/tl-horizontal_main/why-i-hate-a-food-you-probably-love-pickles",
+  "https://migardener-myworksdesign.netdna-ssl.com/wp-content/uploads/2016/11/national-pickling-cucumber.jpg"
 ];
 
 class Post extends Component {

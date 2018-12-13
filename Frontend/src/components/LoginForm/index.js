@@ -14,6 +14,10 @@ import ErrorSnack from "../ErrorSnack";
 import styles from "./LoginForm.module.css";
 
 class LoginForm extends Component {
+  componentDidMount() {
+    const { clearError } = this.props;
+    clearError();
+  }
   constructor(props) {
     super(props);
     this.state = {
