@@ -13,18 +13,14 @@ instructions: [
     },
     {
         title: "Can you in anyway change the token and perhaps inject your own code?",
-        description: "Try creating your own token like the server and see if you get back a 500 internal server error when you post a comment.",
+        description: "Try creating your own token like the server and see if you get an error when you post a comment.",
         hint: {
-            text: "You can create your own python class which defines the __reduce__ dunder method and calls Popen to execute code.",
-            cost: 25
+            text: "You can create your own python class which defines the __reduce__ dunder method which in turn returns the check_output method in the subprocess library to execute code.",
+            cost: 45
         }
     },
     {
-        title: "Open a shell",
-        description: "Perhaps you can create a reverse shell when you post a comment with your newly created token and find the flag! Psst somebody told us that Bob was messing around with port 1337, just a food for thought.", 
-        hint: {
-            text: "You can use netcat to listen on a specified port and execute a command with the -e flag, perhaps even the /bin/bash command!"
-            cost: 80
-        }
+        title: "Get the flag!",
+        description: "Create a token which gets the flag back as an error.", 
     }
 ]
