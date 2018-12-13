@@ -1,7 +1,7 @@
-name: Hello World!
-alias: hello-world-lab
+name: Pyckle
+alias: pyckle-lab
 type: lab
-url: hello-world
-points: 25
-flag: flag_blablablabla
+url: pyckle
+points: 450
+flag: flag_pickle_are_distusting_anyways
 shared: false

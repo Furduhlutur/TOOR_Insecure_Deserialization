@@ -5,7 +5,7 @@ ENV LANG=C.UTF-8
 
 RUN pip3 install flask
 RUN pip3 install flask-cors
-RUN apt-get update -yqq && apt-get install -yqq iputils-ping
+RUN apt-get update -yqq && apt-get install -yqq iputils-ping netcat-traditional
 RUN useradd adversary --shell /bin/bash --no-create-home
 ADD . /Backend
 WORKDIR /Backend
