@@ -16,10 +16,10 @@ import styles from "./Comments.module.css";
 
 class Comments extends Component {
   componentDidMount() {
-    const { getComments, username } = this.props;
-    if (username) {
-      getComments();
-    }
+    // const { getComments, username } = this.props;
+    // if (username) {
+    //   getComments();
+    // }
   }
 
   constructor(props) {

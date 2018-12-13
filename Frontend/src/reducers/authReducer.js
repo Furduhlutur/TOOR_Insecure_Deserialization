@@ -3,12 +3,14 @@ import {
   REGISTER_SUCCESS,
   ERROR,
   LOG_OUT,
-  CLEAR_AUTH_ERR
+  CLEAR_AUTH_ERR,
+  REGISTER_CLEAR
 } from "../constants";
 
 const initialState = {
   username: "",
-  error: ""
+  error: "",
+  registered: false
 };
 
 const authReducer = (state = initialState, action) => {
@@ -19,7 +21,15 @@ const authReducer = (state = initialState, action) => {
         error: ""
       };
     case REGISTER_SUCCESS:
-      return initialState;
+      return {
+        ...state,
+        registered: true
+      };
+    case REGISTER_CLEAR:
+      return {
+        ...state,
+        registered: false
+      };
     case ERROR:
       return {
         username: "",
