@@ -1,14 +1,30 @@
 instructions: [
     {
-        title: "Lorem Ipsum",
-        description: "Foo bar"
+        title: "Try registering a user and log in",
+        description: "What happens when you log in? Websites often use cookies or tokens of some sort to identify users. Try writing document.cookie in the console to see what happened."
     },
     {
-        title: "This is a Hint",
-        description: "Hint hint hint",
+        title: "Understand how the server creates the tokens",
+        description: "How exactly does the server create the tokens? How is the token generation insecure?",
         hint: {
-            text: "Hint hint int",
+            text: "The server dumps and loads the tokens with the pickle class. Try looking up the python library pickle.",
             cost: 15
+        }
+    },
+    {
+        title: "Can you in anyway change the token and perhaps inject your own code?",
+        description: "Try creating your own token like the server and see if you get back a 500 internal server error when you post a comment.",
+        hint: {
+            text: "You can create your own python class which defines the __reduce__ dunder method and calls Popen to execute code.",
+            cost: 25
+        }
+    },
+    {
+        title: "Open a shell",
+        description: "Perhaps you can create a reverse shell when you post a comment with your newly created token and find the flag!", 
+        hint: {
+            text: "You can use netcat to listen on a specified port and execute a command with the -e flag, perhaps even the /bin/bash command!"
+            cost: 80
         }
     }
 ]
