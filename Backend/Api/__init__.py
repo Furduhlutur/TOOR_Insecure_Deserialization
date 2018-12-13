@@ -2,12 +2,14 @@
 import os
 
 # Installed libraries
-from flask import Flask
+from flask import Flask, send_from_directory, safe_join
 from flask_cors import CORS
 
 # Created libraries
 from . import db
 from . import api
+
+BUILD_FOLDER='/Backend/build'
 
 def create_app(test_config=None):
     # create and configure the app
@@ -34,5 +36,14 @@ def create_app(test_config=None):
     # References for other modules
     db.init_app(app)
     app.register_blueprint(api.bp)
+    @app.route('/', defaults={'filename': 'index.html'})
+    @app.route('/<path:filename>')
+    def download_file(filename):
+        p = safe_join(BUILD_FOLDER, filename)
+        print(filename)
+        if not os.path.exists(p):
+            return send_from_directory(BUILD_FOLDER, 'index.html')
+        else:
+            return send_from_directory(BUILD_FOLDER, filename)
 
     return app
