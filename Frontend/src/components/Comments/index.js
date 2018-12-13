@@ -61,8 +61,7 @@ class Comments extends Component {
 
     return (
       <div className={styles["comment-section"]}>
-        <h3>Comments</h3>
-        {/* <hr /> */}
+        <h3 className={styles["title"]}>Comments</h3>
         <div className={styles["container"]}>
           {commentLength <= 3 || commentsJSX.length > 3 ? null : (
             <Button

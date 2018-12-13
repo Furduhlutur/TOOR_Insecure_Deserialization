@@ -7,9 +7,9 @@
 .comment-section {
   background: white;
   margin-top: 10px;
-  width: 80%;
+  width: 93vh;
   padding: 20px;
-  border-radius: 9px;
+  border-radius: 4px;
 }
 
 .container {
@@ -18,4 +18,13 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+.title {
+  font-family: "Open-sans", sans-serif;
+  font-weight: normal;
+  font-size: 29px;
+  color: #0d5842;
+  display: flex;
+  justify-content: center;
 }

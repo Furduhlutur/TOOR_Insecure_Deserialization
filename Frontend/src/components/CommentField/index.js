@@ -18,7 +18,8 @@ class CommentField extends Component {
     };
   }
 
-  comment() {
+  comment(event) {
+    event.preventDefault();
     const { currentComment } = this.state;
     const { comment, postId, username, addComment } = this.props;
     addComment();
@@ -33,7 +34,10 @@ class CommentField extends Component {
   render() {
     const { currentComment } = this.state;
     return (
-      <div className={styles["comment-field-w-button"]}>
+      <form
+        className={styles["comment-field-w-button"]}
+        onSubmit={this.comment.bind(this)}
+      >
         <TextField
           id="standard-with-placeholder"
           placeholder="Comment..."
@@ -43,15 +47,11 @@ class CommentField extends Component {
           className={styles["comment-field"]}
         />
         <div className={styles["lefty"]}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => this.comment()}
-          >
+          <Button variant="contained" color="secondary" type="submit">
             Comment
           </Button>
         </div>
-      </div>
+      </form>
     );
   }
 }

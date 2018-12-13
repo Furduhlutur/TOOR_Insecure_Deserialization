@@ -29,13 +29,14 @@ class LoginForm extends Component {
     this.setState({ [name]: event.target.value });
   };
 
-  handleSubmit = () => {
+  handleSubmit(event) {
     const { name, pass } = this.state;
     const { authenticate, title } = this.props;
 
     authenticate(name, pass, title.toLowerCase() === "login");
     this.setState({ name: "", pass: "" });
-  };
+    event.preventDefault();
+  }
 
   handleClose() {
     const { clearError } = this.props;
@@ -49,10 +50,10 @@ class LoginForm extends Component {
       return <Redirect to="/" />;
     }
     return (
-      <div
+      <form
         className={styles["container"]}
         autoComplete="off"
-        onSubmit={() => this.handleSubmit(title)}
+        onSubmit={this.handleSubmit.bind(this)}
       >
         <Paper className={styles["jumbotron"]}>
           <h3 className={styles["title"]}>{title}</h3>
@@ -74,7 +75,8 @@ class LoginForm extends Component {
           <Button
             variant="contained"
             color="secondary"
-            onClick={() => this.handleSubmit()}
+            type="submit"
+            // onClick={() => this.handleSubmit()}
             className={styles["login-button"]}
           >
             {title}
@@ -85,7 +87,7 @@ class LoginForm extends Component {
           close={this.handleClose.bind(this)}
           message={error}
         />
-      </div>
+      </form>
     );
   }
 }

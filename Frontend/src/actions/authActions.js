@@ -77,7 +77,9 @@ export const authenticate = (username, password, login) => {
     })
       .then(res => res.json())
       .then(resp => {
-        if (login) {
+        if (resp.error) {
+          dispatch(errorStuff(resp.error));
+        } else if (login) {
           localStorage.setItem("username", resp.username);
           dispatch(loginSuccess(resp.username));
         } else {
@@ -85,11 +87,7 @@ export const authenticate = (username, password, login) => {
         }
       })
       .catch(error => {
-        dispatch(
-          errorStuff(
-            login ? "Username or Password incorrect." : "Username already taken"
-          )
-        );
+        dispatch(errorStuff(error));
       });
   };
 };
