@@ -9,5 +9,5 @@ export const ERROR_COMMENTS = "ERROR_COMMENT";
 export const COMMENT = "COMMENT";
 export const ERROR_COMMENT = "ERROR_COMMENT";
 export const LOG_OUT = "LOG_OUT";
-export const DEBUG = false;
+export const DEBUG = true;
 export const REGISTER_CLEAR = "REGISTER_CLEAR";

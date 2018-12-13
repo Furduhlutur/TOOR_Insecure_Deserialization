@@ -11,15 +11,11 @@ import Comments from "../Comments";
 import styles from "./Post.module.css";
 
 // Images for first two posts..
-const images = [
-  "https://assets3.thrillist.com/v1/image/962161/size/tl-horizontal_main/why-i-hate-a-food-you-probably-love-pickles",
-  "https://migardener-myworksdesign.netdna-ssl.com/wp-content/uploads/2016/11/national-pickling-cucumber.jpg"
-];
+const images = [];
 
 class Post extends Component {
   render() {
-    const { title, body, id, username } = this.props.post;
-    const image = images[id - 1];
+    const { title, body, id, username, image } = this.props.post;
     const imageStyle = {
       backgroundImage: `url(${image})`
     };

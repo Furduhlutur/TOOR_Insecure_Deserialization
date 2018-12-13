@@ -21,7 +21,21 @@ export const getPosts = () => {
     })
       .then(res => res.json())
       .then(resp => {
-        dispatch(getPostsSuccess(resp));
+        let posts = resp.map(post => {
+          if (post.title === "The origins of the pickle") {
+            return {
+              image:
+                "https://migardener-myworksdesign.netdna-ssl.com/wp-content/uploads/2016/11/national-pickling-cucumber.jpg",
+              ...post
+            };
+          }
+          return {
+            image:
+              "https://assets3.thrillist.com/v1/image/962161/size/tl-horizontal_main/why-i-hate-a-food-you-probably-love-pickles",
+            ...post
+          };
+        });
+        dispatch(getPostsSuccess(posts));
       })
       .catch(error => dispatch(getPostsError(error)));
   };
