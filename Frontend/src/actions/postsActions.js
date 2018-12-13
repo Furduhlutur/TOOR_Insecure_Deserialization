@@ -1,4 +1,4 @@
-import { GET_POSTS, ERROR_POSTS } from "../constants";
+import { GET_POSTS, ERROR_POSTS, DEBUG } from "../constants";
 
 const getPostsSuccess = posts => {
   return {
@@ -16,7 +16,7 @@ const getPostsError = err => {
 
 export const getPosts = () => {
   return dispatch => {
-    return fetch("/api/post", {
+    return fetch(DEBUG ? "http://localhost:5000/api/post" : "/api/post", {
       credentials: "include"
     })
       .then(res => res.json())

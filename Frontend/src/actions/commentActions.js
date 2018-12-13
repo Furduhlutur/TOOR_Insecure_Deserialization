@@ -2,7 +2,8 @@ import {
   GET_COMMENTS,
   ERROR_COMMENTS,
   COMMENT,
-  ERROR_COMMENT
+  ERROR_COMMENT,
+  DEBUG
 } from "../constants";
 
 const getCommentsSuccess = comments => {
@@ -35,7 +36,7 @@ const commentFailure = err => {
 
 export const getComments = () => {
   return dispatch => {
-    return fetch("/api/comment", {
+    return fetch(DEBUG ? "http://localhost:5000/api/comment" : "/api/comment", {
       credentials: "include"
     })
       .then(res => res.json())
@@ -53,7 +54,7 @@ export const comment = (comm, postId, username) => {
     body.set("post_id", postId);
     body.set("username", username);
 
-    return fetch("/api/comment", {
+    return fetch(DEBUG ? "http://localhost:5000/api/comment" : "/api/comment", {
       method: "POST",
       body: body,
       credentials: "include"
