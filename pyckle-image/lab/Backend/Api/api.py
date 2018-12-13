@@ -68,7 +68,7 @@ def check_auth(token):
                     "SELECT username, password FROM user WHERE id = ?", (user.id,)
                 ).fetchone()
     except Exception as e:
-        return (False, "Invalid token, the object {user} is invalid.")
+        return (False, f"Invalid token, the object {user} is invalid.")
     return (user.name == user_vals[0] and user.password == user_vals[1], "Invalid token.")
 
 def check_admin(token):
