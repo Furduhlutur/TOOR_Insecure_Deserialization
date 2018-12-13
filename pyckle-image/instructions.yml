@@ -1,11 +1,11 @@
 instructions: [
     {
         title: "Try registering a user and log in",
-        description: "What happens when you log in? Websites often use cookies or tokens of some sort to identify users. Try writing document.cookie in the console to see what happened."
+        description: "What happens when you log in? Websites often use cookies or tokens of some sort to identify users. Try writing document.cookie in the console to see what happens."
     },
     {
-        title: "Understand how the server creates the tokens",
-        description: "How exactly does the server create the tokens? How is the token generation insecure?",
+        title: "Understand how the server creates the token",
+        description: "How exactly does the server create the token? How is the token generation insecure?",
         hint: {
             text: "The server dumps and loads the tokens with the pickle class. Try looking up the python library pickle.",
             cost: 15
@@ -21,7 +21,7 @@ instructions: [
     },
     {
         title: "Open a shell",
-        description: "Perhaps you can create a reverse shell when you post a comment with your newly created token and find the flag!", 
+        description: "Perhaps you can create a reverse shell when you post a comment with your newly created token and find the flag! Psst somebody told us that Bob was messing around with port 1337, just a food for thought.", 
         hint: {
             text: "You can use netcat to listen on a specified port and execute a command with the -e flag, perhaps even the /bin/bash command!"
             cost: 80
