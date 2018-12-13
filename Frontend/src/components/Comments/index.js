@@ -2,44 +2,28 @@ import React, { Component } from "react";
 
 // Redux
 import { connect } from "react-redux";
-import { getComments, comment } from "../../actions/commentActions";
-
-// MaterialUI
-import { TextField, Button } from "@material-ui/core";
+import { getComments } from "../../actions/commentActions";
 
 // Our components
 import Comment from "../Comment";
+import CommentField from "../CommentField";
 
 // CSS
 import styles from "./Comments.module.css";
 
 class Comments extends Component {
   componentDidMount() {
-    const { getComments } = this.props;
-    getComments();
+    const { getComments, username } = this.props;
+    if (username) {
+      getComments();
+    }
   }
-
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentComment: ""
-    };
-  }
-
-  comment() {
-    const { currentComment } = this.state;
-    const { comment, info } = this.props;
-    comment(currentComment, ...info);
-    this.setState({ currentComment: "" });
-  }
-
-  handleChange = event => {
-    this.setState({ currentComment: event.target.value });
-  };
 
   render() {
-    const { currentComment } = this.state;
-    const { comments, info } = this.props;
+    const { comments, info, username } = this.props;
+    if (!username) {
+      return null;
+    }
     let postId = info[0];
 
     let commentsJSX = comments.map
@@ -50,38 +34,25 @@ class Comments extends Component {
           })
       : null;
     return (
-      <div className={styles["container"]}>
-        <div className={styles["container"]}>{commentsJSX}</div>
-        <div className={styles["comment-field-w-button"]}>
-          <TextField
-            id="standard-with-placeholder"
-            placeholder="Comment..."
-            margin="normal"
-            value={currentComment}
-            onChange={this.handleChange}
-            className={styles["comment-field"]}
-          />
-          <div className={styles["lefty"]}>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => this.comment()}
-            >
-              Comment
-            </Button>
-          </div>
+      <div className={styles["comment-section"]}>
+        <h3>Comments</h3>
+        <hr />
+        <div className={styles["container"]}>
+          <div className={styles["container"]}>{commentsJSX}</div>
+          <CommentField info={info} />
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = ({ comments }) => ({
+const mapStateToProps = ({ comments, auth }) => ({
   comments: comments.comments,
-  error: comments.error
+  error: comments.error,
+  username: auth.username
 });
 
 export default connect(
   mapStateToProps,
-  { getComments, comment }
+  { getComments }
 )(Comments);

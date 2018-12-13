@@ -1,4 +1,10 @@
-import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR, LOG_OUT } from "../constants";
+import {
+  LOGIN_SUCCESS,
+  REGISTER_SUCCESS,
+  ERROR,
+  LOG_OUT,
+  CLEAR_AUTH_ERR
+} from "../constants";
 
 const initialState = {
   username: "",
@@ -21,6 +27,11 @@ const authReducer = (state = initialState, action) => {
       };
     case LOG_OUT:
       return initialState;
+    case CLEAR_AUTH_ERR:
+      return {
+        ...state,
+        error: ""
+      };
     default:
       return state;
   }

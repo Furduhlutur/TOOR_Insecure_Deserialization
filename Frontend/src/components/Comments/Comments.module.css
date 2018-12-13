@@ -1,16 +1,15 @@
-.comment-field {
-  width: 80%;
-}
-
-.comment-field-w-button {
-  display: flex;
-  width: 65%;
-}
-
 .lefty {
   align-items: center;
   display: flex;
   justify-content: flex-end;
+}
+
+.comment-section {
+  background: white;
+  margin-top: 10px;
+  width: 80%;
+  padding: 20px;
+  border-radius: 9px;
 }
 
 .container {

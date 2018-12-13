@@ -48,7 +48,14 @@ class NavBar extends Component {
     }
     return (
       <AppBar position="static">
-        <Toolbar className={styles["container"]}>{links}</Toolbar>
+        <Toolbar>
+          <div className={styles["lefty"]}>
+            <Link to="/">
+              <div className={styles["logo"]} />
+            </Link>
+          </div>
+          <div className={styles["righty"]}>{links}</div>
+        </Toolbar>
       </AppBar>
     );
   }

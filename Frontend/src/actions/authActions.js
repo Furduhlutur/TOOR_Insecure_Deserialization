@@ -1,4 +1,10 @@
-import { LOGIN_SUCCESS, REGISTER_SUCCESS, ERROR, LOG_OUT } from "../constants";
+import {
+  LOGIN_SUCCESS,
+  REGISTER_SUCCESS,
+  ERROR,
+  LOG_OUT,
+  CLEAR_AUTH_ERR
+} from "../constants";
 
 const loginSuccess = username => {
   return {
@@ -31,6 +37,12 @@ const hasTokenCookie = () => {
   return "";
 };
 
+export const clearError = () => dispatch => {
+  dispatch({
+    type: CLEAR_AUTH_ERR
+  });
+};
+
 export const logOut = () => dispatch => {
   localStorage.setItem("username", "");
   document.cookie = "token=;";
@@ -47,6 +59,10 @@ export const isLoggedIn = () => dispatch => {
       dispatch(loginSuccess(username));
     }
   }
+};
+
+const handleErrors = res => {
+  console.log(res.ok);
 };
 
 export const authenticate = (username, password, login) => {
@@ -73,7 +89,11 @@ export const authenticate = (username, password, login) => {
         }
       })
       .catch(error => {
-        dispatch(errorStuff(error));
+        dispatch(
+          errorStuff(
+            login ? "Username or Password incorrect." : "Username already taken"
+          )
+        );
       });
   };
 };
