@@ -63,10 +63,13 @@ def handle_error(error):
 def check_auth(token):
     db = get_db()
     user = pickle.loads(base64.b64decode(token))
-    user_vals = db.execute(
-                "SELECT username, password FROM user WHERE id = ?", (user.id,)
-            ).fetchone()
-    return user.name == user_vals[0] and user.password == user_vals[1]
+    try:
+        user_vals = db.execute(
+                    "SELECT username, password FROM user WHERE id = ?", (user.id,)
+                ).fetchone()
+    except Exception as e:
+        return (False, "Invalid token, the object {user} is invalid.")
+    return (user.name == user_vals[0] and user.password == user_vals[1], "Invalid token.")
 
 def check_admin(token):
     db = get_db()
@@ -89,8 +92,9 @@ def requires_auth(f):
         if not token:
             return authenticate("Please login")
 
-        elif not check_auth(token):
-            return authenticate("Invalid token")
+        auth_vals = check_auth(token)
+        if not auth_vals[0]:
+            return authenticate(auth_vals[1])
         return f(*args, **kwargs)
     return decorated
 
