@@ -63,14 +63,13 @@ export const isLoggedIn = () => dispatch => {
 
 export const authenticate = (username, password, login) => {
   return dispatch => {
-    const { REACT_APP_API, REACT_APP_PORT } = process.env;
     const path = login ? "/api/login" : "/api/register";
 
     let body = new FormData();
     body.set("username", username);
     body.set("password", password);
 
-    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}` + path, {
+    return fetch(path, {
       method: "POST",
       body: body,
       credentials: "include"

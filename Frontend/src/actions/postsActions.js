@@ -16,8 +16,7 @@ const getPostsError = err => {
 
 export const getPosts = () => {
   return dispatch => {
-    const { REACT_APP_API, REACT_APP_PORT } = process.env;
-    return fetch(`${REACT_APP_API}:${REACT_APP_PORT}/api/post`, {
+    return fetch("/api/post", {
       credentials: "include"
     })
       .then(res => res.json())
