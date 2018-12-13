@@ -1,0 +1,1 @@
+FinalCTF{pickles_are_disgusting_anyways}
