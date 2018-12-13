@@ -5,7 +5,11 @@ import { PropTypes } from "prop-types";
 
 // Redux
 import { connect } from "react-redux";
-import { authenticate, clearError } from "../../actions/authActions";
+import {
+  authenticate,
+  clearError,
+  registerClear
+} from "../../actions/authActions";
 
 // Our Components
 import ErrorSnack from "../ErrorSnack";
@@ -45,9 +49,13 @@ class LoginForm extends Component {
 
   render() {
     const { name, pass } = this.state;
-    let { title, username, error } = this.props;
+    let { title, username, error, registered, registerClear } = this.props;
     if (username) {
       return <Redirect to="/" />;
+    } else if (registered && title.toLowerCase() === "register") {
+      console.log("registered");
+      registerClear();
+      return <Redirect to="/login" />;
     }
     return (
       <form
@@ -76,7 +84,6 @@ class LoginForm extends Component {
             variant="contained"
             color="secondary"
             type="submit"
-            // onClick={() => this.handleSubmit()}
             className={styles["login-button"]}
           >
             {title}
@@ -103,11 +110,12 @@ LoginForm.defaultProps = {
 const mapStateToProps = ({ auth }) => {
   return {
     username: auth.username,
+    registered: auth.registered,
     error: auth.error
   };
 };
 
 export default connect(
   mapStateToProps,
-  { authenticate, clearError }
+  { authenticate, clearError, registerClear }
 )(LoginForm);

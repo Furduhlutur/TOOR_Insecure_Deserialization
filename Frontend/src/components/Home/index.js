@@ -3,6 +3,7 @@ import React, { Component } from "react";
 //Redux
 import { connect } from "react-redux";
 import { getPosts } from "../../actions/postsActions";
+import { getComments } from "../../actions/commentActions";
 
 //CSS
 import styles from "./Home.module.css";
@@ -12,8 +13,11 @@ import Post from "../Post";
 
 class Home extends Component {
   componentDidMount() {
-    const { getPosts } = this.props;
+    const { getPosts, getComments, username } = this.props;
     getPosts();
+    if (username) {
+      getComments();
+    }
   }
 
   render() {
@@ -29,12 +33,12 @@ class Home extends Component {
 }
 
 const mapStateToProps = ({ auth, posts }) => ({
-  user: auth.username,
+  username: auth.username,
   posts: posts.posts,
   error: posts.error
 });
 
 export default connect(
   mapStateToProps,
-  { getPosts }
+  { getPosts, getComments }
 )(Home);

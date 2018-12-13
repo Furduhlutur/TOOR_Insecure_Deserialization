@@ -3,7 +3,9 @@ import {
   REGISTER_SUCCESS,
   ERROR,
   LOG_OUT,
-  CLEAR_AUTH_ERR
+  CLEAR_AUTH_ERR,
+  DEBUG,
+  REGISTER_CLEAR
 } from "../constants";
 
 const loginSuccess = username => {
@@ -43,6 +45,12 @@ export const clearError = () => dispatch => {
   });
 };
 
+export const registerClear = () => dispatch => {
+  dispatch({
+    type: REGISTER_CLEAR
+  });
+};
+
 export const logOut = () => dispatch => {
   localStorage.setItem("username", "");
   document.cookie = "token=;";
@@ -69,12 +77,18 @@ export const authenticate = (username, password, login) => {
     body.set("username", username);
     body.set("password", password);
 
-    return fetch(path, {
+    return fetch(DEBUG ? `http://localhost:5000${path}` : path, {
       method: "POST",
       body: body,
       credentials: "include"
     })
-      .then(res => res.json())
+      .then(res => {
+        if (login || res.status !== 201) {
+          return res.json();
+        } else {
+          return res;
+        }
+      })
       .then(resp => {
         if (resp.error) {
           dispatch(errorStuff(resp.error));
@@ -86,7 +100,7 @@ export const authenticate = (username, password, login) => {
         }
       })
       .catch(error => {
-        dispatch(errorStuff(error));
+        dispatch(errorStuff(error.message));
       });
   };
 };
