@@ -82,6 +82,7 @@ def check_admin(token):
 def authenticate(message):
     message = {"error": message}
     response = jsonify(message)
+    response.headers['Access-Control-Allow-Credentials'] = "true"
     response.status_code = 401
     return response
 
