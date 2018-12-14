@@ -1,2 +1,3 @@
 Dockerfile
 .dockerignore
+Frontend/node_modules

@@ -1,10 +1,11 @@
+pid: 47ef3050-be4e-4da7-9c3d-6121728b5f5f
 name: Pyckle
 alias: pyckle-lab
-type: lab
-url: pyckle
+type: mission
 points: 450
 flag: flag_pickles_are_distusting_anyways
 shared: false
+image: toor-group5
 interface:
     tools:
-        -TERMINAL
+        - TERMINAL
