@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 // Redux
 import { connect } from "react-redux";
-import { getComments } from "../../actions/commentActions";
+import { getComments, clearCommentError } from "../../actions/commentActions";
 
 // MaterialUi
 import { Button } from "@material-ui/core";
@@ -10,18 +10,12 @@ import { Button } from "@material-ui/core";
 // Our components
 import Comment from "../Comment";
 import CommentField from "../CommentField";
+import ErrorSnack from "../ErrorSnack";
 
 // CSS
 import styles from "./Comments.module.css";
 
 class Comments extends Component {
-  componentDidMount() {
-    // const { getComments, username } = this.props;
-    // if (username) {
-    //   getComments();
-    // }
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -40,9 +34,14 @@ class Comments extends Component {
     this.setState({ revealComments: revealComments });
   }
 
+  handleClose() {
+    const { clearCommentError } = this.props;
+    clearCommentError();
+  }
+
   render() {
     const { revealComments } = this.state;
-    const { comments, postId, username } = this.props;
+    const { comments, postId, username, error } = this.props;
     if (!username) {
       return null;
     }
@@ -78,6 +77,11 @@ class Comments extends Component {
             addComment={this.addComment.bind(this)}
           />
         </div>
+        <ErrorSnack
+          open={error !== ""}
+          close={this.handleClose.bind(this)}
+          message={error}
+        />
       </div>
     );
   }
@@ -91,5 +95,5 @@ const mapStateToProps = ({ comments, auth }) => ({
 
 export default connect(
   mapStateToProps,
-  { getComments }
+  { getComments, clearCommentError }
 )(Comments);

@@ -2,7 +2,8 @@ import {
   GET_COMMENTS,
   ERROR_COMMENTS,
   COMMENT,
-  ERROR_COMMENT
+  ERROR_COMMENT,
+  CLEAR_COMMENTS_ERROR
 } from "../constants";
 
 const initialState = {
@@ -21,6 +22,11 @@ const commentsReducer = (state = initialState, action) => {
       return {
         ...state,
         error: action.payload
+      };
+    case CLEAR_COMMENTS_ERROR:
+      return {
+        ...state,
+        error: ""
       };
     case COMMENT:
       const { comments } = state;

@@ -6,6 +6,7 @@ export const ERROR_POSTS = "ERROR_POSTS ";
 export const GET_POSTS = "GET_POSTS";
 export const GET_COMMENTS = "GET_COMMENTS ";
 export const ERROR_COMMENTS = "ERROR_COMMENT";
+export const CLEAR_COMMENTS_ERROR = "CLEAR_COMMENTS_ERROR";
 export const COMMENT = "COMMENT";
 export const ERROR_COMMENT = "ERROR_COMMENT";
 export const LOG_OUT = "LOG_OUT";

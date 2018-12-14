@@ -3,7 +3,8 @@ import {
   ERROR_COMMENTS,
   COMMENT,
   ERROR_COMMENT,
-  DEBUG
+  DEBUG,
+  CLEAR_COMMENTS_ERROR
 } from "../constants";
 
 const getCommentsSuccess = comments => {
@@ -34,6 +35,12 @@ const commentFailure = err => {
   };
 };
 
+export const clearCommentError = () => dispatch => {
+  dispatch({
+    type: CLEAR_COMMENTS_ERROR
+  });
+};
+
 export const getComments = () => {
   return dispatch => {
     return fetch(DEBUG ? "http://localhost:5000/api/comment" : "/api/comment", {
@@ -61,9 +68,13 @@ export const comment = (comm, postId, username) => {
     })
       .then(res => res.json())
       .then(resp => {
+        if (resp.error) {
+          dispatch(commentFailure(resp.error));
+        }
         dispatch(commentSuccess(resp));
       })
       .catch(err => {
+        console.log(err);
         dispatch(commentFailure(err));
       });
   };
