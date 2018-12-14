@@ -9,8 +9,13 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from Api.db import get_db
+
+bp = Blueprint('api', __name__, url_prefix='/api')
+
 def rows_to_dict(rows):
     return [dict(row) for row in rows]
+
 
 class Token(object):
     def __init__(self, id, name, time, password):
@@ -20,18 +25,45 @@ class Token(object):
         self.password = password
 
 
+class Error(Exception):
+    status_code = 400
+
+    def __init__(self, error, status_code=None, payload=None):
+        Exception.__init__(self)
+        self.error = error
+        if status_code is not None:
+            self.status_code = status_code
+        self.payload = payload
+
+    def to_dict(self):
+        response = dict(self.payload or ())
+        response["error"] = self.error
+        return response
+
+@bp.errorhandler(Error)
+def handle_error(error):
+    response = jsonify(error.to_dict())
+    response.status_code = error.status_code
+    response.headers['Access-Control-Allow-Credentials'] = "true"
+    return response
+
+
 #/// LIVE CODE
 def check_auth(token):
     db = get_db()
     user = pickle.loads(base64.b64decode(token))
-    user_vals = db.execute(
-                "SELECT username, password FROM user WHERE id = ?", (user.id,)
-            ).fetchone()
-    return user.name == user_vals[0] and user.password == user_vals[1]
+    try:
+        user_vals = db.execute(
+                    "SELECT username, password FROM user WHERE id = ?", (user.id,)
+                ).fetchone()
+    except Exception as e:
+        return (False, f"Invalid token, the object {user} is invalid.")
+    return (user.name == user_vals[0] and user.password == user_vals[1], "Invalid token.")
 
 def authenticate(message):
     message = {"error": message}
     response = jsonify(message)
+    response.headers['Access-Control-Allow-Credentials'] = "true"
     response.status_code = 401
     return response
 
@@ -42,11 +74,13 @@ def requires_auth(f):
         if not token:
             return authenticate("Please login")
 
-        elif not check_auth(token):
-            return authenticate("Invalid token")
+        auth_vals = check_auth(token)
+        if not auth_vals[0]:
+            return authenticate(auth_vals[1])
         return f(*args, **kwargs)
     return decorated
 #/// END LIVE CODE
+
 
 @bp.route('/register', methods=['POST'])
 def register():
