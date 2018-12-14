@@ -1,9 +1,11 @@
 instructions: [
     {
+        pid: 132a2151-a4d3-4e3f-8d21-acdf685208e7,
         title: "Try registering a user and log in",
         description: "What happens when you log in? Websites often use cookies or tokens of some sort to identify users. Try writing document.cookie in the console to see what happens."
     },
     {
+        pid: 132b2151-a4d3-4e3f-8d21-acdf685208e7,
         title: "Understand how the server creates the token",
         description: "How exactly does the server create the token? How is the token generation insecure?",
         hint: {
@@ -12,6 +14,7 @@ instructions: [
         }
     },
     {
+        pid: 132c2151-a4d3-4e3f-8d21-acdf685208e7,
         title: "Can you in anyway change the token and perhaps inject your own code?",
         description: "Try creating your own token like the server and see if you get an error when you post a comment.",
         hint: {
@@ -20,6 +23,7 @@ instructions: [
         }
     },
     {
+        pid: 132d2151-a4d3-4e3f-8d21-acdf685208e7,
         title: "Get the flag!",
         description: "Create a token which gets the flag back as an error.", 
     }

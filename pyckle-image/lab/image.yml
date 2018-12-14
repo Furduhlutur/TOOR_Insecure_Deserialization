@@ -1,0 +1,6 @@
+image: toor-group5
+type: web
+flag_system: "environment"
+options:
+    flag_envvar: "FLAG"
+
