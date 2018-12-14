@@ -53,7 +53,6 @@ class LoginForm extends Component {
     if (username) {
       return <Redirect to="/" />;
     } else if (registered && title.toLowerCase() === "register") {
-      console.log("registered");
       registerClear();
       return <Redirect to="/login" />;
     }

@@ -66,16 +66,24 @@ export const comment = (comm, postId, username) => {
       body: body,
       credentials: "include"
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.headers.get("content-type").includes("application/json")) {
+          return res.json();
+        } else if (res.status === 500) {
+          dispatch(commentFailure("Oops something went wrong..."));
+        } else {
+          return res.text();
+        }
+      })
       .then(resp => {
         if (resp.error) {
           dispatch(commentFailure(resp.error));
+        } else {
+          dispatch(commentSuccess(resp));
         }
-        dispatch(commentSuccess(resp));
       })
       .catch(err => {
-        console.log(err);
-        dispatch(commentFailure(err));
+        dispatch(commentFailure("Oops something went wrong..."));
       });
   };
 };
