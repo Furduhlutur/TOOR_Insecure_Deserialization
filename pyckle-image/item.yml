@@ -3,7 +3,7 @@ alias: pyckle-lab
 type: lab
 url: pyckle
 points: 450
-flag: flag_pickles_are_distusting_anyways
+flag: FinalCTF{pickles_are_disgusting_anyways}
 shared: false
 interface:
     tools:
