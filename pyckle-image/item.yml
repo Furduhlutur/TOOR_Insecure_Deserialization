@@ -7,5 +7,6 @@ flag: FinalCTF{pickles_are_disgusting_anyways}
 shared: false
 image: toor-group5
 interface:
+    manualFlag: true
     tools:
         - TERMINAL
